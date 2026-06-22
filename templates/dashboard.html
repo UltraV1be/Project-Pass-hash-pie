@@ -115,14 +115,120 @@
                 </li>
                 <li>
                     <i class="fa-regular fa-square-check text-emerald"></i>
-                    <span><strong>Enable MFA:</strong> Multi-Factor Authentication provides an essential layer of security even if your password is stolen or cracked.</span>
+                    <span><strong>Use a Password Manager:</strong> Local or cloud-encrypted managers (e.g., Bitwarden, 1Password) generate and store strong, unique keys. Always choose ones with zero-knowledge encryption architecture.</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="glass-card insight-info-card">
+            <h3><i class="fa-solid fa-shield-halved text-purple" style="color: #a855f7;"></i> Multi-Factor Authentication (MFA)</h3>
+            <p class="margin-top-sm">Passwords are fundamentally flawed on their own. MFA provides an essential defense-in-depth layer against phishing and leaked credentials.</p>
+            
+            <div class="bullet-box margin-top-md">
+                <div class="bullet-item">
+                    <i class="fa-solid fa-mobile-screen text-purple" style="color: #a855f7;"></i>
+                    <div>
+                        <strong>Authenticator Apps (TOTP):</strong> Apps like Google Authenticator generate time-based codes. These are vastly superior to SMS texts, which are highly vulnerable to SIM-swapping attacks.
+                    </div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fa-brands fa-usb text-purple" style="color: #a855f7;"></i>
+                    <div>
+                        <strong>Hardware Security Keys (FIDO2):</strong> YubiKeys or Titan keys offer the highest level of protection. They cryptographically bind the login attempt to the specific website, rendering man-in-the-middle phishing attacks impossible.
+                    </div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fa-solid fa-fingerprint text-purple" style="color: #a855f7;"></i>
+                    <div>
+                        <strong>Biometrics & Passkeys:</strong> Modern WebAuthn standards allow you to replace passwords entirely with secure biometric prompts (FaceID, TouchID, Windows Hello) that never send secrets over the network.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mfa-chart-container margin-top-lg" style="position: relative; height: 250px; width: 100%;">
+                <h4 style="text-align: center; margin-bottom: 15px; color: #e2e8f0; font-size: 0.9rem;">Targeted Phishing Prevention Rate by MFA Type</h4>
+                <canvas id="mfaEfficacyChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="glass-card insight-checklist-card">
+            <h3><i class="fa-solid fa-user-shield text-amber"></i> Broader Cybersecurity Hygiene</h3>
+            <p class="margin-top-sm">Protecting your credentials is only one part of maintaining robust digital security.</p>
+            
+            <ul class="secure-habits-list margin-top-md">
+                <li>
+                    <i class="fa-solid fa-triangle-exclamation text-amber"></i>
+                    <span><strong>Phishing Awareness:</strong> Attackers often don't "hack" in; they just ask you to log in. Be deeply skeptical of urgent emails, verify sender domains carefully, and never click suspicious login links.</span>
                 </li>
                 <li>
-                    <i class="fa-regular fa-square-check text-emerald"></i>
-                    <span><strong>Use a Password Manager:</strong> Local or cloud-encrypted managers generate and store strong, unique keys so you don't have to remember them.</span>
+                    <i class="fa-solid fa-triangle-exclamation text-amber"></i>
+                    <span><strong>MFA Fatigue Attacks:</strong> If you receive an unexpected push notification to approve a login, deny it immediately. Attackers spam these hoping you accidentally click "Approve" just to make it stop.</span>
+                </li>
+                <li>
+                    <i class="fa-solid fa-triangle-exclamation text-amber"></i>
+                    <span><strong>Zero Trust Principles:</strong> Always assume the network is compromised. Use trusted VPNs on public Wi-Fi, strictly apply security patches to OS and browsers, and verify identities before sharing data.</span>
                 </li>
             </ul>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    // Only run if Chart.js is loaded and canvas exists
+    if (typeof Chart !== 'undefined' && document.getElementById('mfaEfficacyChart')) {
+        const ctx = document.getElementById('mfaEfficacyChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Passwords Only', 'SMS MFA', 'App (TOTP)', 'Hardware Key (FIDO)'],
+                datasets: [{
+                    label: 'Phishing Attack Block Rate (%)',
+                    data: [0, 76, 90, 100],
+                    backgroundColor: [
+                        'rgba(239, 68, 68, 0.25)',   // Crimson
+                        'rgba(245, 158, 11, 0.25)',  // Amber
+                        'rgba(0, 242, 254, 0.25)',   // Cyan
+                        'rgba(168, 85, 247, 0.25)'   // Purple
+                    ],
+                    borderColor: [
+                        'rgba(239, 68, 68, 1)',
+                        'rgba(245, 158, 11, 1)',
+                        'rgba(0, 242, 254, 1)',
+                        'rgba(168, 85, 247, 1)'
+                    ],
+                    borderWidth: 2,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y + '% Prevention';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: "rgba(255,255,255,0.05)" },
+                        ticks: { color: "#94a3b8", callback: function(value) { return value + "%" } }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: "#94a3b8", font: { size: 10, family: "Plus Jakarta Sans" } }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
 {% endblock %}
