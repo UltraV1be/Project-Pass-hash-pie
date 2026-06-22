@@ -112,3 +112,43 @@ def generate_passphrase(
         passphrase += f"{separator}{secrets.randbelow(100)}"
 
     return passphrase
+
+
+def generate_keyword_password(
+    keyword="password",
+    length=16,
+    leetspeak=True,
+    include_numbers=True,
+    include_special=True
+):
+    """
+    Generates a strong password based on a user-provided keyword.
+    """
+    if not keyword:
+        keyword = "cyber"
+
+    base_word = keyword
+    if leetspeak:
+        replacements = {'a': '@', 'e': '3', 'i': '1', 'o': '0', 's': '$', 't': '7', 'A': '@', 'E': '3', 'I': '1', 'O': '0', 'S': '$', 'T': '7'}
+        new_word = ""
+        for char in base_word:
+            if char in replacements and secrets.choice([True, False]):
+                new_word += replacements[char]
+            else:
+                new_word += char
+        base_word = new_word
+
+    pool = string.ascii_letters
+    if include_numbers:
+        pool += string.digits
+    if include_special:
+        pool += string.punctuation
+
+    chars_to_add = max(4, length - len(base_word))
+    prefix_len = chars_to_add // 2
+    suffix_len = chars_to_add - prefix_len
+
+    prefix = "".join(secrets.choice(pool) for _ in range(prefix_len))
+    suffix = "".join(secrets.choice(pool) for _ in range(suffix_len))
+
+    return prefix + base_word + suffix

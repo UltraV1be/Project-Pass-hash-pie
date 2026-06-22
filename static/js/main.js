@@ -409,8 +409,10 @@ function initAnalyzerPage() {
 function initGeneratorPage() {
     const tabPasswordBtn = document.getElementById("tabPasswordBtn");
     const tabPassphraseBtn = document.getElementById("tabPassphraseBtn");
+    const tabKeywordBtn = document.getElementById("tabKeywordBtn");
     const passwordTabContent = document.getElementById("passwordTabContent");
     const passphraseTabContent = document.getElementById("passphraseTabContent");
+    const keywordTabContent = document.getElementById("keywordTabContent");
     
     // Sliders
     const charLength = document.getElementById("charLength");
@@ -429,6 +431,14 @@ function initGeneratorPage() {
     const passSeparator = document.getElementById("passSeparator");
     const passCapitalize = document.getElementById("passCapitalize");
     const passIncludeNumber = document.getElementById("passIncludeNumber");
+    
+    // Options Keyword
+    const keywordInput = document.getElementById("keywordInput");
+    const keywordLength = document.getElementById("keywordLength");
+    const keywordLengthValue = document.getElementById("keywordLengthValue");
+    const keyLeetspeak = document.getElementById("keyLeetspeak");
+    const keyNumbers = document.getElementById("keyNumbers");
+    const keySpecial = document.getElementById("keySpecial");
     
     // Action triggers
     const generateBtn = document.getElementById("generateBtn");
@@ -450,8 +460,10 @@ function initGeneratorPage() {
         currentMode = "password";
         tabPasswordBtn.classList.add("active");
         tabPassphraseBtn.classList.remove("active");
+        tabKeywordBtn.classList.remove("active");
         passwordTabContent.classList.add("active");
         passphraseTabContent.classList.remove("active");
+        keywordTabContent.classList.remove("active");
         generateCredentials();
     });
 
@@ -459,8 +471,21 @@ function initGeneratorPage() {
         currentMode = "passphrase";
         tabPassphraseBtn.classList.add("active");
         tabPasswordBtn.classList.remove("active");
+        tabKeywordBtn.classList.remove("active");
         passphraseTabContent.classList.add("active");
         passwordTabContent.classList.remove("active");
+        keywordTabContent.classList.remove("active");
+        generateCredentials();
+    });
+
+    tabKeywordBtn.addEventListener("click", () => {
+        currentMode = "keyword";
+        tabKeywordBtn.classList.add("active");
+        tabPasswordBtn.classList.remove("active");
+        tabPassphraseBtn.classList.remove("active");
+        keywordTabContent.classList.add("active");
+        passwordTabContent.classList.remove("active");
+        passphraseTabContent.classList.remove("active");
         generateCredentials();
     });
 
@@ -471,6 +496,10 @@ function initGeneratorPage() {
 
     wordCount.addEventListener("input", () => {
         wordCountValue.innerText = wordCount.value;
+    });
+
+    keywordLength.addEventListener("input", () => {
+        keywordLengthValue.innerText = keywordLength.value;
     });
 
     const generateCredentials = async () => {
@@ -485,6 +514,15 @@ function initGeneratorPage() {
                 use_digits: genDigits.checked,
                 use_special: genSpecial.checked,
                 exclude_similar: genExcludeSimilar.checked
+            };
+        } else if (currentMode === "keyword") {
+            payload = {
+                ...payload,
+                keyword: keywordInput.value,
+                length: keywordLength.value,
+                leetspeak: keyLeetspeak.checked,
+                include_numbers: keyNumbers.checked,
+                include_special: keySpecial.checked
             };
         } else {
             payload = {

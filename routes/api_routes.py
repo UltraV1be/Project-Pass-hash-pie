@@ -3,6 +3,7 @@ from modules.password_analyzer import analyze_password
 from modules.password_generator import (
     generate_random_password,
     generate_passphrase,
+    generate_keyword_password,
 )
 from modules.breach_checker import check_password_breach
 from hashing import (
@@ -64,6 +65,20 @@ def generate():
             use_digits=use_digits,
             use_special=use_special,
             exclude_similar=exclude_similar,
+        )
+    elif mode == "keyword":
+        keyword = data.get("keyword", "cyber")
+        length = int(data.get("length", 16))
+        leetspeak = data.get("leetspeak", True)
+        include_numbers = data.get("include_numbers", True)
+        include_special = data.get("include_special", True)
+
+        pwd = generate_keyword_password(
+            keyword=keyword,
+            length=length,
+            leetspeak=leetspeak,
+            include_numbers=include_numbers,
+            include_special=include_special
         )
     else:
         word_count = int(data.get("word_count", 4))

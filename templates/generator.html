@@ -15,6 +15,7 @@
         <div class="tab-header">
             <button id="tabPasswordBtn" class="tab-btn active"><i class="fa-solid fa-key"></i> Random Character</button>
             <button id="tabPassphraseBtn" class="tab-btn"><i class="fa-solid fa-font"></i> Memorable Passphrase</button>
+            <button id="tabKeywordBtn" class="tab-btn"><i class="fa-solid fa-spell-check"></i> Keyword Password</button>
         </div>
         
         <!-- Tab Content 1: Random Character Password -->
@@ -90,6 +91,36 @@
                     <input type="checkbox" id="passIncludeNumber" checked>
                     <span class="checkmark"></span>
                     Append Random Number (adds entropy)
+                </label>
+            </div>
+        </div>
+        
+        <!-- Tab Content 3: Keyword -->
+        <div id="keywordTabContent" class="tab-content">
+            <div class="control-group">
+                <label for="keywordInput">Base Keyword</label>
+                <input type="text" id="keywordInput" class="text-input" placeholder="Enter keyword (e.g., cyber)" style="width: 100%; padding: 10px; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 4px; font-family: inherit;">
+            </div>
+            <div class="control-group margin-top-md">
+                <label for="keywordLength">Target Length: <span id="keywordLengthValue" class="text-emerald text-bold">16</span></label>
+                <input type="range" id="keywordLength" min="8" max="64" value="16" class="range-slider">
+            </div>
+            
+            <div class="checkbox-options-grid margin-top-md">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="keyLeetspeak" checked>
+                    <span class="checkmark"></span>
+                    Use Leetspeak (e->3, a->@)
+                </label>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="keyNumbers" checked>
+                    <span class="checkmark"></span>
+                    Add Numbers
+                </label>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="keySpecial" checked>
+                    <span class="checkmark"></span>
+                    Add Special Chars
                 </label>
             </div>
         </div>
