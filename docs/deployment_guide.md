@@ -2,6 +2,17 @@
 
 Follow these instructions to configure, run, and deploy the application locally or to production environments.
 
+## Deployment Architecture
+
+The following diagram illustrates the recommended production deployment model.
+
+```mermaid
+graph LR
+    Client([Client Browser]) -->|HTTPS / Port 443| Proxy[Reverse Proxy <br> Nginx / Caddy]
+    Proxy -->|Local Port 5000| WSGI[WSGI Server <br> Gunicorn / Waitress]
+    WSGI --> App[Flask Application]
+```
+
 ## 1. Prerequisites
 - Python 3.12+ (Python 3.14 is fully supported and recommended on Windows for pre-compiled wheels).
 - Pip (updated).

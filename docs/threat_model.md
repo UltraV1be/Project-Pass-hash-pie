@@ -2,6 +2,28 @@
 
 This document outlines primary threat vectors targeted at user credentials and documents how SecurePass-Intelligence demonstrates mitigation strategies.
 
+## Attack Tree Analysis
+
+The following flowchart outlines the different paths an attacker might take to compromise a system using weak credentials, and how this platform mitigates those vectors.
+
+```mermaid
+graph TD
+    Attack[Password Compromise]
+    Attack --> Online[Online Attacks]
+    Attack --> Offline[Offline Database Breaches]
+    
+    Online --> Brute[Brute Force / Guessing]
+    Online --> Stuffing[Credential Stuffing]
+    
+    Offline --> HashAttack[Rapid Hash Inversion]
+    Offline --> DictAttack[Dictionary Attacks]
+    
+    Brute -.-> |Mitigation| Estimator(Crack Time Estimator ensures H is high)
+    Stuffing -.-> |Mitigation| HIBP(Data Breach Radar - k-Anonymity)
+    HashAttack -.-> |Mitigation| KDF(Argon2id/Bcrypt Work Factor math)
+    DictAttack -.-> |Mitigation| Strength(Heuristic pattern penalties)
+```
+
 ## 1. Threat Vectors
 
 ### A. Online Brute-Force Attacks
@@ -31,3 +53,25 @@ This document outlines primary threat vectors targeted at user credentials and d
 | **Memory Hardness** | No | No | Yes (Prevents ASIC/GPU efficiency) |
 | **Parallelism Control** | No | No | Yes (Multi-thread scaling) |
 | **Hardware Resistance** | None | Low | High |
+
+## 3. The Mathematics of Key Derivation Functions (KDFs)
+
+To mitigate offline attacks, KDFs artificially inflate the computational cost of verifying a password. 
+
+### Bcrypt
+Bcrypt relies on a parameterized cost factor ($$C$$). The total number of internal operations scales exponentially.
+
+$$
+\text{Operations} \propto 2^C
+$$
+
+If a cost factor of $$C = 12$$ takes 0.3 seconds, increasing it to $$C = 13$$ will take 0.6 seconds. This exponential scaling allows defenders to keep pace with Moore's Law.
+
+### Argon2id
+Argon2id is the winner of the Password Hashing Competition. It defends against GPU/ASIC attacks by being **memory-hard**. It accepts three tuning parameters:
+
+1. **$$t$$ (Time Cost)**: The number of iterations.
+2. **$$m$$ (Memory Cost)**: The amount of RAM the algorithm is forced to allocate and write to (e.g., 64 MB).
+3. **$$p$$ (Parallelism)**: The number of threads required.
+
+The cost to attack Argon2 is modeled as the Time-Memory Tradeoff (TMTO). If an attacker tries to compute the hash using less memory than $$m$$, the time required scales exponentially, heavily penalizing custom ASIC chips that lack large, fast RAM arrays.

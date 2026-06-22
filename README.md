@@ -2,12 +2,29 @@
 
 SecurePass-Intelligence is an interactive, advanced cybersecurity password analyzer, secure generator, leak radar, and cryptographic benchmarking sandbox.
 
+## System Architecture Overview
+
+```mermaid
+graph TD
+    User([User / Browser]) <--> |AJAX / JSON| WebAPI[Flask Backend API]
+    
+    subgraph Core Security Modules
+        WebAPI --> Analyzer[Password Threat Analyzer]
+        WebAPI --> Generator[Secure Generator]
+        WebAPI --> HashBench[Cryptographic Workbench]
+        WebAPI --> Breach[Data Breach Radar]
+    end
+    
+    Breach <--> |k-Anonymity SHA-1| HIBP((HaveIBeenPwned API))
+    Analyzer -.-> Math[Entropy & Estimator Engines]
+```
+
 ## Key Features
-1. **Password Threat Analyzer**: Analyzes password strength scoring, Shannon entropy, guesses/brute force duration estimates, structural runs, and leverages AI advisory checks.
-2. **Secure Credentials Generator**: Offers a tabbed configuration for cryptographically secure random passwords or multi-word memorable passphrases.
+1. **Password Threat Analyzer**: Analyzes password strength scoring, Shannon entropy ($$H = L \times \log_2(R)$$), guesses/brute force duration estimates ($$\text{Time} = \frac{R^L}{\text{Speed}}$$), structural runs, and leverages AI advisory checks.
+2. **Secure Credentials Generator**: Offers a tabbed configuration for cryptographically secure random passwords, multi-word memorable passphrases, and keyword-based passwords with automated leetspeak substitutions.
 3. **Data Breach Radar**: Securely queries the HaveIBeenPwned API via k-Anonymity range search to check if a password has been compromised.
-4. **Cryptographic workbench**: Benchmarks and visualizes computation speed and attack cost across SHA-256, SHA-512, bcrypt, scrypt, and Argon2id.
-5. **Security Intelligence Insights**: Educational summaries on entropy, key derivation functions, and NIST compliant password guidelines.
+4. **Cryptographic Workbench**: Benchmarks and visualizes computation speed and attack cost across algorithms like SHA-256, SHA-512, bcrypt, scrypt, and Argon2id.
+5. **Security Intelligence Insights**: Educational summaries on entropy math, key derivation functions, and NIST compliant password guidelines.
 
 ## Directory Structure
 ```
@@ -108,3 +125,16 @@ Run the comprehensive `pytest` test suite:
 ```bash
 pytest -v
 ```
+
+## 📚 Project Documentation
+- [System Architecture](docs/architecture.md)
+- [Threat Model & Mitigations](docs/threat_model.md)
+- [Deployment Guide](docs/deployment_guide.md)
+- [Implementation Walkthrough](docs/walkthrough.md)
+
+## ⚠️ Disclaimer
+This project is intended for educational purposes and cybersecurity awareness. While the tool generates cryptographically secure passwords and evaluates entropy using established mathematical algorithms, no security system is completely foolproof. The authors are not responsible for any security breaches or data loss that may occur. Always use a combination of strong passwords, hardware security keys, multi-factor authentication (MFA), and safe browsing habits.
+
+## 🤝 Credits
+- Data breach queries are powered by the [Have I Been Pwned](https://haveibeenpwned.com/) API via k-Anonymity protocols.
+- Developed by **Atharv** for CyberSecurity exploration.

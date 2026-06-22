@@ -24,6 +24,70 @@ graph TD
     Orchestrator --> AI[ai_advisor.py]
 ```
 
+## Core Engine Flow
+
+The following sequence diagram outlines the process when a user inputs a password for analysis:
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant BackendAPI
+    participant Analyzer
+    participant HIBP
+
+    User->>Frontend: Types Password
+    Frontend->>BackendAPI: POST /api/analyze {password}
+    BackendAPI->>Analyzer: analyze_password(pwd)
+    
+    par Mathematical Scoring
+        Analyzer->>Analyzer: Calculate Entropy (H)
+        Analyzer->>Analyzer: Estimate Crack Times
+    and Heuristic Analysis
+        Analyzer->>Analyzer: Dictionary checks
+        Analyzer->>Analyzer: Pattern mapping
+    and Breach Checking
+        Analyzer->>HIBP: GET range check (k-Anonymity)
+        HIBP-->>Analyzer: Leaked hashes
+    end
+    
+    Analyzer-->>BackendAPI: Security Metrics JSON
+    BackendAPI-->>Frontend: JSON Response
+    Frontend-->>User: Render Gauges & Warnings
+```
+
+## Cryptographic Mathematics
+
+### 1. Shannon Entropy
+
+Entropy ($$H$$) measures the unpredictability or randomness of the password. It is calculated based on the length of the password ($$L$$) and the size of the character pool ($$R$$).
+
+$$
+H = L \times \log_2(R)
+$$
+
+- **$$L$$ (Length)**: The number of characters in the password.
+- **$$R$$ (Pool Size)**: The total number of unique characters in the sets used (e.g., 26 lowercase + 26 uppercase + 10 digits = 62).
+
+*Higher entropy means the password is exponentially harder to brute-force.*
+
+### 2. Crack Time Estimation
+
+Crack time is the estimated time it would take an attacker to guess the password. For pure brute-force attacks, the mathematical relationship is defined by the total number of possible combinations ($$N$$) divided by the attacker's guessing speed ($$S$$).
+
+Total combinations:
+$$
+N = R^L = 2^H
+$$
+
+Estimated Time to Crack:
+$$
+\text{Time (seconds)} = \frac{N}{S} = \frac{2^H}{S}
+$$
+
+- **$$S$$ (Speed)**: Guesses per second. Online attacks might be limited to 100 guesses/sec. Offline hardware attacks (using GPUs) can easily reach $$10^{10}$$ (10 billion) guesses/sec against weak hashing functions like MD5 or SHA-1.
+
+
 ### 1. Presentation Layer (`templates/` & `static/`)
 - **Control Cockpits**: Rendered via Flask templates (`index.html`, `analysis.html`, `generator.html`, `breach.html`, `hashing.html`, `dashboard.html`).
 - **Styling**: Managed in `style.css` using slate glassmorphic panels, Outfits typography, and custom variables for semantic feedback.

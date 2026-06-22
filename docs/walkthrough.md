@@ -2,6 +2,18 @@
 
 SecurePass-Intelligence has been fully implemented as a premium dark-themed cybersecurity control panel. The backend uses Python (Flask), and the frontend is powered by vanilla CSS/JS and Chart.js.
 
+## Development Workflow
+
+```mermaid
+graph TD
+    Design[UI/UX Design] --> Core[Core Python Algorithms]
+    Core --> Hashing[Cryptographic Hashing]
+    Core --> Flask[Flask Blueprints API]
+    Hashing --> Flask
+    Flask --> Frontend[Vanilla JS & Chart.js]
+    Frontend --> Testing[Pytest & Manual Validation]
+```
+
 ## What Was Built
 
 ### 1. Configuration & App Bootstrap
@@ -17,7 +29,7 @@ SecurePass-Intelligence has been fully implemented as a premium dark-themed cybe
 - [risk_engine.py](file:///d:/Atharv%20Projects/CyberSecurity/Project%20Pass-hash-pie/modules/risk_engine.py): Integrated security risk score compiler.
 - [suggestion_engine.py](file:///d:/Atharv%20Projects/CyberSecurity/Project%20Pass-hash-pie/modules/suggestion_engine.py): Corrective suggestions checklist.
 - [ai_advisor.py](file:///d:/Atharv%20Projects/CyberSecurity/Project%20Pass-hash-pie/modules/ai_advisor.py): Expert rules cybersecurity advisor with Gemini Flash fallback.
-- [password_generator.py](file:///d:/Atharv%20Projects/CyberSecurity/Project%20Pass-hash-pie/modules/password_generator.py): System Random secure password and wordlist passphrase creator.
+- [password_generator.py](file:///d:/Atharv%20Projects/CyberSecurity/Project%20Pass-hash-pie/modules/password_generator.py): System Random secure password, wordlist passphrase creator, and **keyword-based leetspeak generator**.
 
 ### 3. Cryptographic Workbench (`hashing/`)
 - Benchmark, salting, and verification algorithms for:
