@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Cryptographic Workbench | SecurePass-Intelligence{% endblock %}
+
+{% block content %}
+<div class="welcome-container animate-fade-in">
+    <h1 class="page-title">Cryptographic Hash Workbench</h1>
+    <p class="page-subtitle">Demonstrate and benchmark hashing algorithm cost and processing latency</p>
+</div>
+
+<div class="hashing-layout animate-slide-up">
+    <!-- Configuration Column -->
+    <div class="hashing-config-column">
+        <!-- Hashing Form -->
+        <div class="glass-card hashing-form-card">
+            <h3><i class="fa-solid fa-gears"></i> Parameter Configuration</h3>
+            
+            <div class="control-group margin-top-md">
+                <label for="hashInput">Input Password or Text</label>
+                <input type="text" id="hashInput" placeholder="Enter text to hash..." value="SecurityLaboratory2026">
+            </div>
+
+            <div class="control-group">
+                <label for="hashAlgorithm">Algorithm</label>
+                <select id="hashAlgorithm">
+                    <option value="sha256">SHA-256 (Fast Hashing)</option>
+                    <option value="sha512">SHA-512 (Fast Hashing)</option>
+                    <option value="bcrypt">Bcrypt (Slow Key-Derivation)</option>
+                    <option value="scrypt">Scrypt (Memory-Hard slow KDF)</option>
+                    <option value="argon2">Argon2id (Winner PHC KDF)</option>
+                </select>
+            </div>
+
+            <!-- Contextual settings container (populated dynamically) -->
+            <div id="dynamicSettingsContainer" class="dynamic-settings-box">
+                <!-- SHA256 Options -->
+                <div id="settingsSha256" class="algo-setting-section active">
+                    <div class="control-group">
+                        <label for="sha256Iterations">Iterations: <span id="sha256IterationsVal" class="text-cyan font-bold">1</span></label>
+                        <input type="range" id="sha256Iterations" min="1" max="10000" value="1" step="1" class="range-slider">
+                    </div>
+                </div>
+
+                <!-- SHA512 Options -->
+                <div id="settingsSha512" class="algo-setting-section">
+                    <div class="control-group">
+                        <label for="sha512Iterations">Iterations: <span id="sha512IterationsVal" class="text-cyan font-bold">1</span></label>
+                        <input type="range" id="sha512Iterations" min="1" max="10000" value="1" step="1" class="range-slider">
+                    </div>
+                </div>
+
+                <!-- Bcrypt Options -->
+                <div id="settingsBcrypt" class="algo-setting-section">
+                    <div class="control-group">
+                        <label for="bcryptRounds">Work Factor (Rounds): <span id="bcryptRoundsVal" class="text-cyan font-bold">10</span></label>
+                        <input type="range" id="bcryptRounds" min="4" max="15" value="10" class="range-slider">
+                        <p class="card-hint">Exponential factor: 2<sup>rounds</sup> operations</p>
+                    </div>
+                </div>
+
+                <!-- Scrypt Options -->
+                <div id="settingsScrypt" class="algo-setting-section">
+                    <div class="control-group">
+                        <label for="scryptN">CPU/Memory Cost (N): <span id="scryptNVal" class="text-cyan font-bold">16384</span></label>
+                        <select id="scryptN" class="form-select">
+                            <option value="1024">1024 (Low)</option>
+                            <option value="4096">4096 (Medium-Low)</option>
+                            <option value="16384" selected>16384 (Standard)</option>
+                            <option value="32768">32768 (High)</option>
+                        </select>
+                    </div>
+                    <div class="select-options-grid">
+                        <div class="select-group">
+                            <label for="scryptR">Block Size (r)</label>
+                            <input type="number" id="scryptR" value="8" min="1" max="32">
+                        </div>
+                        <div class="select-group">
+                            <label for="scryptP">Parallelism (p)</label>
+                            <input type="number" id="scryptP" value="1" min="1" max="8">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Argon2 Options -->
+                <div id="settingsArgon2" class="algo-setting-section">
+                    <div class="control-group">
+                        <label for="argon2Time">Time Cost (Iterations): <span id="argon2TimeVal" class="text-cyan font-bold">2</span></label>
+                        <input type="range" id="argon2Time" min="1" max="10" value="2" class="range-slider">
+                    </div>
+                    <div class="control-group">
+                        <label for="argon2Memory">Memory Cost (KiB): <span id="argon2MemoryVal" class="text-cyan font-bold">65536</span></label>
+                        <input type="range" id="argon2Memory" min="8192" max="262144" step="8192" value="65536" class="range-slider">
+                    </div>
+                    <div class="control-group">
+                        <label for="argon2Parallelism">Parallelism (Threads): <span id="argon2ParallelismVal" class="text-cyan font-bold">4</span></label>
+                        <input type="range" id="argon2Parallelism" min="1" max="8" value="4" class="range-slider">
+                    </div>
+                </div>
+            </div>
+
+            <button id="runBenchmarkBtn" class="btn btn-primary btn-block margin-top-lg"><i class="fa-solid fa-bolt"></i> Generate Hash & Benchmark</button>
+        </div>
+    </div>
+
+    <!-- Output and Chart Column -->
+    <div class="hashing-output-column">
+        <!-- Results Card -->
+        <div class="glass-card hash-result-card">
+            <h3>Benchmark Result</h3>
+            <div class="hash-meta-stats">
+                <div class="meta-stat-item">
+                    <span class="label">Processing Latency:</span>
+                    <span id="benchmarkDuration" class="val text-cyan">0.000 ms</span>
+                </div>
+                <div class="meta-stat-item">
+                    <span class="label">Relative Attack Cost:</span>
+                    <span id="attackCostBadge" class="badge badge-gray">N/A</span>
+                </div>
+            </div>
+            
+            <div class="control-group margin-top-md">
+                <label>Hash Digest Output</label>
+                <div class="hash-output-box" id="benchmarkHashOutput">
+                    No hash digest generated yet. Configure settings and click benchmark.
+                </div>
+            </div>
+        </div>
+
+        <!-- Latency Chart Card -->
+        <div class="glass-card benchmark-chart-card">
+            <h3>Latency Comparison (ms)</h3>
+            <p class="card-desc">Slow hashing protects credentials by raising the cost of guesses. Higher latency makes offline GPU cracking rigs unfeasible.</p>
+            <div class="chart-wrapper margin-top-md">
+                <canvas id="benchmarkLatencyChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

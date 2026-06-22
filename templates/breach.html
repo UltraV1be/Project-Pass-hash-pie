@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block title %}Breach Radar | SecurePass-Intelligence{% endblock %}
+
+{% block content %}
+<div class="welcome-container animate-fade-in">
+    <h1 class="page-title">Data Breach Radar</h1>
+    <p class="page-subtitle">Verify if your password has been exposed in public database leaks securely</p>
+</div>
+
+<div class="breach-container animate-slide-up">
+    <!-- Check Box Panel -->
+    <div class="glass-card breach-form-card">
+        <h3><i class="fa-solid fa-triangle-exclamation"></i> Registry Leak Scanner</h3>
+        <p class="card-desc">Enter any password to verify its status against over 10 billion breached credentials records. The entry will not be logged or saved.</p>
+        
+        <div class="password-input-group margin-top-md">
+            <input type="password" id="breachPasswordInput" placeholder="Enter password to scan..." autocomplete="off">
+            <button type="button" id="toggleBreachPasswordBtn" class="icon-btn">
+                <i class="fa-solid fa-eye" id="breachToggleIcon"></i>
+            </button>
+        </div>
+        
+        <button id="scanBreachBtn" class="btn btn-primary btn-block margin-top-lg"><i class="fa-solid fa-radar"></i> Scan Registry Leaks</button>
+    </div>
+
+    <!-- Result Display Panel -->
+    <div class="glass-card breach-result-card hide" id="breachResultCard">
+        <div class="breach-status-header">
+            <div id="statusIconWrapper" class="status-icon-wrapper">
+                <i class="fa-solid" id="statusIcon"></i>
+            </div>
+            <h2 id="breachStatusTitle">Scanning...</h2>
+        </div>
+        
+        <div id="breachStatusDetails" class="breach-status-details">
+            <!-- Dynamic feedback messages will go here -->
+        </div>
+    </div>
+</div>
+
+<!-- Educational details explaining privacy-safe SHA1 range matching -->
+<div class="glass-card privacy-edu-card animate-slide-up">
+    <h3><i class="fa-solid fa-shield-halved text-cyan"></i> Privacy-Safe Security (k-Anonymity)</h3>
+    <div class="privacy-edu-grid">
+        <div class="edu-text">
+            <p><strong>How it works:</strong> When you run a query, the application transforms the entry into a cryptographically secure SHA-1 hash. Only the first 5 characters of this hash are sent to the HaveIBeenPwned service. The API server returns a list of matching hashes sharing that prefix. The application then performs the comparison locally on your machine.</p>
+            <p><strong>Result:</strong> Neither the third-party API nor our server ever sees the plain password, and it is impossible to reconstruct it from the 5-character prefix. Your credentials remain private.</p>
+        </div>
+        <div class="edu-flow-diagram">
+            <div class="diagram-step">
+                <span class="step-num">1</span>
+                <span class="step-lbl">Plain Password</span>
+                <span class="step-val">"qwerty123"</span>
+            </div>
+            <div class="diagram-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="diagram-step">
+                <span class="step-num">2</span>
+                <span class="step-lbl">SHA-1 Hash</span>
+                <span class="step-val">"B8F09..."</span>
+            </div>
+            <div class="diagram-arrow"><i class="fa-solid fa-chevron-right"></i></div>
+            <div class="diagram-step">
+                <span class="step-num">3</span>
+                <span class="step-lbl">Secure Query</span>
+                <span class="step-val">"B8F09" (Prefix only)</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

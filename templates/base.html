@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SecurePass-Intelligence{% endblock %}</title>
+    
+    <!-- Modern Typography: Outfit & Inter from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Link to custom stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Chart.js for premium graphics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- FontAwesome for security cockpit icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="glow-bg"></div>
+    
+    <header class="app-header">
+        <div class="logo-container">
+            <i class="fa-solid fa-shield-halved logo-icon"></i>
+            <span class="logo-text">SecurePass<span class="highlight">.Intel</span></span>
+        </div>
+        <nav class="main-nav">
+            <a href="/" class="nav-link"><i class="fa-solid fa-table-columns"></i> Core</a>
+            <a href="/analysis" class="nav-link"><i class="fa-solid fa-magnifying-glass-chart"></i> Analyzer</a>
+            <a href="/generator" class="nav-link"><i class="fa-solid fa-key"></i> Generator</a>
+            <a href="/breach" class="nav-link"><i class="fa-solid fa-triangle-exclamation"></i> Breach Radar</a>
+            <a href="/hashing" class="nav-link"><i class="fa-solid fa-flask"></i> Hash Lab</a>
+            <a href="/dashboard" class="nav-link"><i class="fa-solid fa-chart-line"></i> Insights</a>
+        </nav>
+    </header>
+    
+    <main class="app-content">
+        {% if error %}
+        <div class="glass-card error-card animate-slide-up">
+            <i class="fa-solid fa-circle-exclamation error-icon"></i>
+            <h2>System Alert</h2>
+            <p>{{ error }}</p>
+            <a href="/" class="btn btn-primary">Return to Cockpit</a>
+        </div>
+        {% else %}
+            {% block content %}{% endblock %}
+        {% endif %}
+    </main>
+    
+    <footer class="app-footer">
+        <p>&copy; 2026 SecurePass-Intelligence | Hardened Cybersecurity Analysis System</p>
+    </footer>
+
+    <!-- Main application logic -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

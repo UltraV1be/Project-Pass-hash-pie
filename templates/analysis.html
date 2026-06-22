@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}Threat Analyzer | SecurePass-Intelligence{% endblock %}
+
+{% block content %}
+<div class="welcome-container animate-fade-in">
+    <h1 class="page-title">Password Threat Analyzer</h1>
+    <p class="page-subtitle">Real-time cryptographic analysis, entropy measuring, and threat assessment</p>
+</div>
+
+<div class="analysis-layout animate-slide-up">
+    <!-- Left panel: Input and quick score -->
+    <div class="analysis-control-panel">
+        <div class="glass-card main-input-card">
+            <h3><i class="fa-solid fa-shield-halved"></i> Assess Credentials</h3>
+            <div class="password-input-group">
+                <input type="password" id="passwordInput" placeholder="Enter password to analyze..." autocomplete="off">
+                <button type="button" id="togglePasswordBtn" class="icon-btn">
+                    <i class="fa-solid fa-eye" id="toggleIcon"></i>
+                </button>
+            </div>
+            <div class="checkbox-group">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="checkBreachesCheckbox" checked>
+                    <span class="checkmark"></span>
+                    Query HaveIBeenPwned API (Secure Range Check)
+                </label>
+            </div>
+            
+            <div class="gauge-container">
+                <div class="circular-progress">
+                    <svg class="progress-ring" width="160" height="160">
+                        <circle class="progress-ring__circle-bg" stroke="rgba(255,255,255,0.05)" stroke-width="12" fill="transparent" r="70" cx="80" cy="80"/>
+                        <circle id="scoreProgressCircle" class="progress-ring__circle" stroke="hsl(180, 100%, 50%)" stroke-width="12" stroke-linecap="round" fill="transparent" r="70" cx="80" cy="80"/>
+                    </svg>
+                    <div class="gauge-text-overlay">
+                        <span id="scoreText" class="gauge-score">0</span>
+                        <span class="gauge-max">/100</span>
+                    </div>
+                </div>
+                <div class="rating-display">
+                    <span class="rating-label">Rating:</span>
+                    <span id="ratingBadge" class="badge badge-gray">No Input</span>
+                </div>
+            </div>
+            
+            <div class="export-actions">
+                <button id="exportTxtBtn" class="btn btn-secondary btn-sm" disabled><i class="fa-solid fa-file-export"></i> Export TXT</button>
+                <button id="exportJsonBtn" class="btn btn-secondary btn-sm" disabled><i class="fa-solid fa-file-code"></i> Export JSON</button>
+            </div>
+        </div>
+        
+        <div class="glass-card ai-advisor-card">
+            <h3 class="card-accent-title"><i class="fa-solid fa-robot text-cyan"></i> AI Cybersecurity Advisor</h3>
+            <div id="aiAdviceContent" class="ai-advice-text">
+                Input a password to receive an expert cybersecurity advisory statement.
+            </div>
+        </div>
+    </div>
+
+    <!-- Right panel: Detailed stats, warnings, suggestions, graphs -->
+    <div class="analysis-details-panel">
+        <!-- Row 1: Metrics -->
+        <div class="metrics-summary-grid">
+            <div class="glass-card metric-item-card">
+                <span class="card-subtitle">Shannon Entropy</span>
+                <h2 id="entropyValue" class="text-cyan">0.00 <span class="unit">bits</span></h2>
+                <p id="entropyDesc" class="card-hint">Pool size: 0 characters</p>
+            </div>
+            <div class="glass-card metric-item-card">
+                <span class="card-subtitle">System Risk Index</span>
+                <h2 id="riskLevelText" class="text-gray">None</h2>
+                <p id="riskDesc" class="card-hint">Vulnerability flag</p>
+            </div>
+            <div class="glass-card metric-item-card">
+                <span class="card-subtitle">Leaked Registries</span>
+                <h2 id="breachCountText" class="text-emerald">0 <span class="unit">leaks</span></h2>
+                <p id="breachDesc" class="card-hint">Compromise database count</p>
+            </div>
+        </div>
+
+        <!-- Row 2: Crack Time Estimates -->
+        <div class="glass-card crack-times-card">
+            <h3><i class="fa-solid fa-skull"></i> Brute-Force Guessing Speed Estimates</h3>
+            <div class="crack-scenarios-grid">
+                <div class="scenario-item">
+                    <i class="fa-solid fa-globe scenario-icon online-icon"></i>
+                    <div class="scenario-details">
+                        <span class="scenario-name">Online Attack <small>(Rate-limited: 100/s)</small></span>
+                        <h4 id="onlineCrackTime">Instant</h4>
+                    </div>
+                </div>
+                <div class="scenario-item">
+                    <i class="fa-solid fa-microchip scenario-icon offline-fast-icon"></i>
+                    <div class="scenario-details">
+                        <span class="scenario-name">Offline GPU Attack <small>(SHA-256: 10 GH/s)</small></span>
+                        <h4 id="offlineFastCrackTime">Instant</h4>
+                    </div>
+                </div>
+                <div class="scenario-item">
+                    <i class="fa-solid fa-lock scenario-icon offline-slow-icon"></i>
+                    <div class="scenario-details">
+                        <span class="scenario-name">Offline Target Attack <small>(Argon2/Bcrypt: 100 k/s)</small></span>
+                        <h4 id="offlineSlowCrackTime">Instant</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3: Warnings & Suggestions -->
+        <div class="warnings-suggestions-grid">
+            <div class="glass-card list-card-item warning-panel">
+                <h4><i class="fa-solid fa-triangle-exclamation text-crimson"></i> Vulnerability Warnings</h4>
+                <ul id="warningsList" class="vulnerabilities-list">
+                    <li class="empty-list-placeholder">No vulnerabilities flagged.</li>
+                </ul>
+            </div>
+            <div class="glass-card list-card-item suggestion-panel">
+                <h4><i class="fa-solid fa-list-check text-emerald"></i> Hardening Checklist</h4>
+                <ul id="suggestionsList" class="checklist-list">
+                    <li class="empty-list-placeholder">Checklist will populate on input.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Row 4: Charts -->
+        <div class="charts-container-grid">
+            <div class="glass-card chart-card">
+                <h4>Character Pool Composition</h4>
+                <div class="chart-wrapper">
+                    <canvas id="charDistChart"></canvas>
+                </div>
+            </div>
+            <div class="glass-card chart-card">
+                <h4>Entropy Scale Projection</h4>
+                <div class="chart-wrapper">
+                    <canvas id="entropyCurveChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

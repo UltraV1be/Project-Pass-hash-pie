@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}Insights Dashboard | SecurePass-Intelligence{% endblock %}
+
+{% block content %}
+<div class="welcome-container animate-fade-in">
+    <h1 class="page-title">Security Intelligence Dashboard</h1>
+    <p class="page-subtitle">Comparative cryptographic guides and security compliance metrics</p>
+</div>
+
+<div class="dashboard-layout animate-slide-up">
+    <!-- Hashing matrix panel -->
+    <div class="glass-card matrix-card">
+        <h3><i class="fa-solid fa-table-list"></i> Cryptographic Hashing Algorithms Comparison Matrix</h3>
+        <p class="card-desc">Modern standards require slow, resource-intensive hashing algorithms for protecting user passwords, making hardware accelerated cracking attacks extremely expensive.</p>
+        
+        <div class="table-responsive margin-top-md">
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Type</th>
+                        <th>Resource Bounds</th>
+                        <th>Vulnerability</th>
+                        <th>Security Grade</th>
+                        <th>Primary Recommendation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>SHA-256</strong></td>
+                        <td>Message Digest</td>
+                        <td>None (CPU Only)</td>
+                        <td>Extremely vulnerable to GPU brute-forcing</td>
+                        <td><span class="badge badge-crimson">Poor</span></td>
+                        <td>Use only for integrity verification, NOT passwords.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>SHA-512</strong></td>
+                        <td>Message Digest</td>
+                        <td>None (CPU Only)</td>
+                        <td>Extremely vulnerable to GPU brute-forcing</td>
+                        <td><span class="badge badge-crimson">Poor</span></td>
+                        <td>Use only for integrity verification, NOT passwords.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bcrypt</strong></td>
+                        <td>Slow KDF</td>
+                        <td>CPU cost scaling</td>
+                        <td>Vulnerable to custom FPGA/ASIC chips</td>
+                        <td><span class="badge badge-amber">Moderate</span></td>
+                        <td>Acceptable standard legacy support. Work factor >= 10.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Scrypt</strong></td>
+                        <td>Slow KDF</td>
+                        <td>CPU & Memory cost</td>
+                        <td>Susceptible to massive parallel ASIC bounds</td>
+                        <td><span class="badge badge-cyan">Good</span></td>
+                        <td>Highly secure. Preferred in blockchain & file systems.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Argon2id</strong></td>
+                        <td>Slow KDF</td>
+                        <td>CPU, Memory & Parallelism</td>
+                        <td>No known hardware cracking efficiency</td>
+                        <td><span class="badge badge-emerald">Excellent</span></td>
+                        <td>**Industry Gold Standard (OWASP, NIST)**. Highly recommended.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Educational stats columns -->
+    <div class="insights-grid margin-top-lg">
+        <div class="glass-card insight-info-card">
+            <h3><i class="fa-solid fa-lightbulb text-cyan"></i> Entropy vs Length Insights</h3>
+            <p class="margin-top-sm">Shannon Entropy calculates the unpredictability of a password mathematically. It relies on two main factors: password length ($L$) and character pool size ($R$).</p>
+            
+            <div class="bullet-box margin-top-md">
+                <div class="bullet-item">
+                    <i class="fa-solid fa-circle-chevron-right text-cyan"></i>
+                    <div>
+                        <strong>Length is Exponential:</strong> Adding characters to a password increases combinations exponentially ($R^L$), whereas adding character classes (e.g. symbols) only increases it linearly.
+                    </div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fa-solid fa-circle-chevron-right text-cyan"></i>
+                    <div>
+                        <strong>Passphrases are King:</strong> A passphrase composed of 4 random words has an entropy of roughly 44-50 bits, and is much easier for a human to remember than a random 10-character alphanumeric password like <code>k#P9!m&Z</code>.
+                    </div>
+                </div>
+                <div class="bullet-item">
+                    <i class="fa-solid fa-circle-chevron-right text-cyan"></i>
+                    <div>
+                        <strong>Offline Guess Speeds:</strong> High-end GPU rigs can hash SHA-256 at rates exceeding $100 \times 10^9$ guesses per second. Without memory-hard or slow algorithms (like Argon2), brute force succeeds rapidly.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card insight-checklist-card">
+            <h3><i class="fa-solid fa-circle-check text-emerald"></i> Modern Password Rules</h3>
+            <p class="margin-top-sm">Adopt these security habits recommended by cybersecurity standards bodies (NIST SP 800-63B):</p>
+            
+            <ul class="secure-habits-list margin-top-md">
+                <li>
+                    <i class="fa-regular fa-square-check text-emerald"></i>
+                    <span><strong>Uniqueness:</strong> Never reuse a password. Compromise of one account leads to "credential stuffing" hacks across others.</span>
+                </li>
+                <li>
+                    <i class="fa-regular fa-square-check text-emerald"></i>
+                    <span><strong>No Expiration Policies:</strong> NIST recommends against forcing password updates unless a breach has occurred, as users tend to make minor predictable variations (e.g. <code>Winter2025!</code> to <code>Spring2025!</code>).</span>
+                </li>
+                <li>
+                    <i class="fa-regular fa-square-check text-emerald"></i>
+                    <span><strong>Enable MFA:</strong> Multi-Factor Authentication provides an essential layer of security even if your password is stolen or cracked.</span>
+                </li>
+                <li>
+                    <i class="fa-regular fa-square-check text-emerald"></i>
+                    <span><strong>Use a Password Manager:</strong> Local or cloud-encrypted managers generate and store strong, unique keys so you don't have to remember them.</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

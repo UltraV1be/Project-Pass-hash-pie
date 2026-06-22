@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block title %}Cockpit | SecurePass-Intelligence{% endblock %}
+
+{% block content %}
+<div class="welcome-container animate-fade-in">
+    <h1 class="page-title">Cybersecurity Control Cockpit</h1>
+    <p class="page-subtitle">Real-time threat evaluation, generation, and cryptographic benchmarking</p>
+</div>
+
+<div class="dashboard-grid animate-slide-up">
+    <!-- Card 1: Password Analyzer -->
+    <div class="glass-card link-card">
+        <div class="card-icon-wrapper cyan-glow">
+            <i class="fa-solid fa-magnifying-glass-chart"></i>
+        </div>
+        <h2 class="card-title">Password Threat Analyzer</h2>
+        <p class="card-desc">Evaluate Shannon entropy, brute force guess time estimates, structural pattern matches, and query AI advisory feedback.</p>
+        <a href="/analysis" class="card-action-btn">Launch Analyzer <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    <!-- Card 2: Password Generator -->
+    <div class="glass-card link-card">
+        <div class="card-icon-wrapper emerald-glow">
+            <i class="fa-solid fa-key"></i>
+        </div>
+        <h2 class="card-title">Secure Credentials Generator</h2>
+        <p class="card-desc">Generate cryptographically secure random passwords or readable, multi-word passphrases with custom separation rules.</p>
+        <a href="/generator" class="card-action-btn">Launch Generator <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    <!-- Card 3: Breach Radar -->
+    <div class="glass-card link-card">
+        <div class="card-icon-wrapper amber-glow">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <h2 class="card-title">Data Breach Radar</h2>
+        <p class="card-desc">Instantly query the HaveIBeenPwned API using secure SHA-1 range matching to discover leaks of your credentials.</p>
+        <a href="/breach" class="card-action-btn">Launch Radar <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    <!-- Card 4: Hash Workbench -->
+    <div class="glass-card link-card">
+        <div class="card-icon-wrapper purple-glow">
+            <i class="fa-solid fa-flask"></i>
+        </div>
+        <h2 class="card-title">Cryptographic Hash Lab</h2>
+        <p class="card-desc">Compare computation performance speeds across SHA-2, bcrypt, scrypt, and Argon2id. Visualize hashing latency in real-time.</p>
+        <a href="/hashing" class="card-action-btn">Launch Lab <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+</div>
+
+<div class="system-status-panel glass-card animate-slide-up">
+    <div class="status-header">
+        <h3><i class="fa-solid fa-circle-nodes"></i> System Security Status</h3>
+        <span class="status-badge secure-badge">OPERATIONAL</span>
+    </div>
+    <div class="status-metrics">
+        <div class="status-metric">
+            <span class="metric-label">Bcrypt Engine</span>
+            <span class="metric-val">Active (v4.1+)</span>
+        </div>
+        <div class="status-metric">
+            <span class="metric-label">Argon2id Core</span>
+            <span class="metric-val">Active (CFFI-25.1)</span>
+        </div>
+        <div class="status-metric">
+            <span class="metric-label">Breach API</span>
+            <span class="metric-val text-emerald">Connected</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
