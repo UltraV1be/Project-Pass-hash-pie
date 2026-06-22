@@ -20,7 +20,7 @@ class Config:
     HIBP_API_URL = "https://api.pwnedpasswords.com/range"
 
     # Optional Gemini AI Settings
-    GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", None)
+    GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
     # Path settings
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))

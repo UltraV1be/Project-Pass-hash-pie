@@ -58,9 +58,7 @@ def get_ai_advice(
     """
     Generates tailored security advice using Gemini if configured, otherwise falls back to expert rules.
     """
-    api_key = getattr(
-        Config, "GEMINI_API_KEY", os.environ.get("GEMINI_API_KEY")
-    )
+    api_key = getattr(Config, "GEMINI_API_KEY", None)
 
     if not api_key or not HAS_GEMINI_SDK:
         return get_rule_based_advice(risk_level, score, breach_count)
