@@ -65,8 +65,6 @@ def get_ai_advice(
 
     try:
         genai.configure(api_key=api_key)
-        # Using gemini-1.5-flash as the standard efficient model
-        model = genai.GenerativeModel("gemini-1.5-flash")
 
         prompt = (
             f"You are a cybersecurity expert analysis engine. Analyze this password's security metrics:\n"
@@ -79,7 +77,15 @@ def get_ai_advice(
             f"Focus on the primary risk and concrete action. Do not repeat the raw metrics, explain what they mean for the user."
         )
 
-        response = model.generate_content(prompt)
+        try:
+            # Using gemini-1.5-flash as the standard efficient model
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            response = model.generate_content(prompt)
+        except Exception as e:
+            logger.warning(f"Failed with gemini-1.5-flash: {e}, falling back to gemini-pro")
+            model = genai.GenerativeModel("gemini-pro")
+            response = model.generate_content(prompt)
+
         if response and response.text:
             return response.text.strip()
 
