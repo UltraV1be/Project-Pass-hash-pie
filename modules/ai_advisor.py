@@ -4,9 +4,9 @@ from config import Config
 
 logger = logging.getLogger(__name__)
 
-# Try to import google-generativeai, handle if not installed
+# Try to import google.genai, handle if not installed
 try:
-    import google.generativeai as genai
+    from google import genai
 
     HAS_GEMINI_SDK = True
 except ImportError:
@@ -64,7 +64,7 @@ def get_ai_advice(
         return get_rule_based_advice(risk_level, score, breach_count)
 
     try:
-        genai.configure(api_key=api_key)
+        client = genai.Client(api_key=api_key)
 
         prompt = (
             f"You are a cybersecurity expert analysis engine. Analyze this password's security metrics:\n"
@@ -79,12 +79,16 @@ def get_ai_advice(
 
         try:
             # Using gemini-1.5-flash as the standard efficient model
-            model = genai.GenerativeModel("gemini-1.5-flash")
-            response = model.generate_content(prompt)
+            response = client.models.generate_content(
+                model='gemini-1.5-flash',
+                contents=prompt
+            )
         except Exception as e:
             logger.warning(f"Failed with gemini-1.5-flash: {e}, falling back to gemini-pro")
-            model = genai.GenerativeModel("gemini-pro")
-            response = model.generate_content(prompt)
+            response = client.models.generate_content(
+                model='gemini-pro',
+                contents=prompt
+            )
 
         if response and response.text:
             return response.text.strip()
