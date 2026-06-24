@@ -38,6 +38,11 @@
     box-sizing: border-box;
 }
 
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
 body {
     background-color: var(--bg-dark);
     color: var(--text-main);
@@ -45,7 +50,6 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
     position: relative;
 }
 
@@ -1380,3 +1384,203 @@ select:focus {
 
 .animate-fade-in { animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 .animate-slide-up { animation: slideUp 0.7s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+
+/* ==========================================================================
+   12. Responsive Design Enhancements (Mobile, Tablet, Laptop)
+   ========================================================================== */
+
+/* Hamburger Button */
+.mobile-menu-toggle {
+    display: none;
+    background: transparent;
+    border: 1px solid var(--border-card);
+    color: var(--text-muted);
+    font-size: 1.25rem;
+    cursor: pointer;
+    z-index: 101;
+    width: 2.75rem;
+    height: 2.75rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-menu-toggle:hover {
+    color: var(--cyan-primary);
+    background: rgba(0, 242, 254, 0.05);
+    border-color: var(--cyan-glow);
+    box-shadow: 0 0 8px var(--cyan-glow);
+}
+
+.mobile-menu-toggle.active {
+    color: var(--cyan-primary);
+    border-color: var(--cyan-glow);
+    background: rgba(0, 242, 254, 0.08);
+}
+
+/* Nav Overlay Backdrop */
+.nav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(4, 6, 12, 0.6);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 98;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.nav-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Mobile & Tablet Responsive Media Queries */
+@media (max-width: 768px) {
+    /* Header layout */
+    .app-header {
+        padding: 1rem 1.25rem;
+    }
+    
+    .logo-text {
+        font-size: 1.25rem;
+    }
+    
+    .logo-icon {
+        font-size: 1.5rem;
+    }
+    
+    .mobile-menu-toggle {
+        display: flex;
+    }
+    
+    /* Navigation Drawer */
+    .main-nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 280px;
+        height: 100vh;
+        transform: translateX(100%);
+        background: rgba(7, 10, 19, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-left: 1px solid var(--border-card);
+        flex-direction: column;
+        justify-content: flex-start;
+        padding: 6.5rem 1.5rem 2rem 1.5rem;
+        gap: 0.75rem;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 99;
+        box-shadow: -10px 0 35px rgba(0, 0, 0, 0.6);
+    }
+    
+    .main-nav.active {
+        transform: translateX(0);
+    }
+    
+    .nav-link {
+        width: 100%;
+        font-size: 1.05rem;
+        padding: 0.75rem 1rem;
+        border-left: 3px solid transparent;
+        border-radius: 8px;
+    }
+    
+    .nav-link.active {
+        border-left: 3px solid var(--cyan-primary);
+        background: rgba(0, 242, 254, 0.04);
+    }
+
+    /* Content & Card Padding */
+    .app-content {
+        padding: 1.5rem 1rem;
+    }
+    
+    .glass-card {
+        padding: 1.25rem;
+    }
+    
+    .page-title {
+        font-size: 1.85rem;
+    }
+    
+    .page-subtitle {
+        font-size: 0.95rem;
+    }
+
+    /* Privacy Flow Diagram (breach.html) */
+    .edu-flow-diagram {
+        flex-direction: column;
+        gap: 1.25rem;
+        padding: 1.25rem;
+    }
+    
+    .diagram-step {
+        width: 100%;
+    }
+    
+    .diagram-arrow {
+        transform: rotate(90deg);
+        margin: 0.25rem 0;
+    }
+
+    /* Comparison Table Horizontal Scroll Safety */
+    .comparison-table {
+        min-width: 680px;
+    }
+    
+    /* System Status panel spacing */
+    .status-metrics {
+        gap: 1.5rem;
+    }
+    
+    .app-footer {
+        padding: 1.25rem 1rem;
+        margin-top: 2.5rem;
+    }
+}
+
+/* Small mobile devices */
+@media (max-width: 640px) {
+    /* Generator tabs stacking */
+    .tab-header {
+        flex-direction: column;
+        gap: 0.35rem;
+        padding: 0.35rem;
+    }
+    
+    .tab-btn {
+        width: 100%;
+        padding: 0.75rem;
+    }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 480px) {
+    .checkbox-options-grid,
+    .select-options-grid,
+    .export-actions {
+        grid-template-columns: 1fr;
+    }
+    
+    .gauge-container {
+        margin: 1.25rem 0;
+    }
+    
+    .circular-progress {
+        transform: scale(0.9);
+    }
+}
+
+/* Laptop Optimization (large width padding adjustments) */
+@media (min-width: 1400px) {
+    .app-content {
+        padding: 3rem 0;
+    }
+}

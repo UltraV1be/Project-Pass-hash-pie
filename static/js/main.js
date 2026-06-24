@@ -34,6 +34,43 @@ function initNavigation() {
             link.classList.remove("active");
         }
     });
+
+    // Mobile Menu Toggle Logic
+    const toggleBtn = document.getElementById("mobileMenuToggle");
+    const mainNav = document.querySelector(".main-nav");
+    const navOverlay = document.getElementById("navOverlay");
+    
+    if (toggleBtn && mainNav) {
+        const toggleMenu = () => {
+            const isActive = mainNav.classList.toggle("active");
+            if (navOverlay) navOverlay.classList.toggle("active", isActive);
+            toggleBtn.classList.toggle("active", isActive);
+            
+            const icon = toggleBtn.querySelector("i");
+            if (icon) {
+                if (isActive) {
+                    icon.className = "fa-solid fa-xmark";
+                } else {
+                    icon.className = "fa-solid fa-bars";
+                }
+            }
+        };
+        
+        toggleBtn.addEventListener("click", toggleMenu);
+        
+        if (navOverlay) {
+            navOverlay.addEventListener("click", toggleMenu);
+        }
+        
+        // Close menu when a link is clicked
+        navLinks.forEach(link => {
+            link.addEventListener("click", () => {
+                if (mainNav.classList.contains("active")) {
+                    toggleMenu();
+                }
+            });
+        });
+    }
 }
 
 function debounce(func, wait) {
